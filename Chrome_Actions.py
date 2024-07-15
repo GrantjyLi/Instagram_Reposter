@@ -2,7 +2,6 @@
 #pip install webdriver-manager
 
 import json
-
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
@@ -21,24 +20,32 @@ options.add_experimental_option("detach", True) #leaves window open when done
 #part of setup
 driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
 
-def loginInstagram():
-    file = open('Insta_Tag_Names.json')
+with open('Insta_Tag_Names.json') as file:
     tagData = json.load(file)
 
-    instagramURL = "https://www.instagram.com/"
+def loginInstagram():
+
+    instagramURL = tagData["instagramURL"]
     driver.get(instagramURL)
 
-    unInput = driver.find_element(By.CSS_SELECTOR, '[aria-label="Phone number, username, or email"]')
-    pwInput = driver.find_element(By.CSS_SELECTOR, '[aria-label="Password"]')
-    loginBTN = driver.find_element(By.CSS_SELECTOR, 'button._acap._acas._aj1-._ap30')
+    try:
+        unInput = WebDriverWait(driver, 3).until(
+            EC.presence_of_element_located((By.CSS_SELECTOR, tagData["UNInputIdentifier"]))
+        )
+        pwInput = driver.find_element(By.CSS_SELECTOR, tagData["PWInputIdentifier"])
+        loginBTN = driver.find_element(By.CSS_SELECTOR, tagData["loginBTNIdentifier"])
 
-    unInput.send_keys(accUsername)
-    pwInput.send_keys(accPassword)
-    loginBTN.click()
+        unInput.send_keys(accUsername)
+        pwInput.send_keys(accPassword)
+        loginBTN.click()
+
+        print("Loggin in")
+    except NoSuchElementException:
+        print("Cannot Load Instagram Login")
 
     try: # save login info pop-up might happen
         saveLoginBTN = WebDriverWait(driver, 3).until(
-            EC.presence_of_element_located((By.CSS_SELECTOR, "button._acap._acas._aj1-._ap30"))
+            EC.presence_of_element_located((By.CSS_SELECTOR, tagData["saveBTNIdentifier"]))
         )
         print("Not saving Login")
 
@@ -47,7 +54,7 @@ def loginInstagram():
         print("Login Already Saved")
 
 
-    file.close()
+
 
 
 
