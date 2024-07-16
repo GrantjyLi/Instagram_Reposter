@@ -29,26 +29,28 @@ def loginInstagram():
     driver.get(instagramURL)
 
     try:
-        unInput = WebDriverWait(driver, 3).until(
-            EC.presence_of_element_located((By.CSS_SELECTOR, tagData["UNInputIdentifier"]))
+        unInput = WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.CSS_SELECTOR, tagData["UNInputCSS"]))
         )
-        pwInput = driver.find_element(By.CSS_SELECTOR, tagData["PWInputIdentifier"])
-        loginBTN = driver.find_element(By.CSS_SELECTOR, tagData["loginBTNIdentifier"])
+        pwInput = driver.find_element(By.CSS_SELECTOR, tagData["PWInputCSS"])
+        loginBTN = driver.find_element(By.CSS_SELECTOR, tagData["loginBTNCSS"])
 
         unInput.send_keys(accUsername)
         pwInput.send_keys(accPassword)
         loginBTN.click()
 
-        print("Loggin in")
+        print("Logging in")
     except NoSuchElementException:
         print("Cannot Load Instagram Login")
 
     try: # save login info pop-up might happen
-        saveLoginBTN = WebDriverWait(driver, 3).until(
-            EC.presence_of_element_located((By.CSS_SELECTOR, tagData["saveBTNIdentifier"]))
+        notNowBTN = WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.CSS_SELECTOR, tagData["saveBTNCSS"]))
         )
-        print("Not saving Login")
 
+        notNowBTN = driver.find_element(By.CSS_SELECTOR, tagData["notNowBTNCSS"])
+        notNowBTN.click()
+        print("Not saving Login")
 
     except NoSuchElementException:
         print("Login Already Saved")

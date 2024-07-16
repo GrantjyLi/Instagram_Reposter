@@ -1,7 +1,6 @@
 {
     "instagramURL": "https://www.instagram.com/",
-    "UNInputIdentifier": "[aria-label=\"Phone number, username, or email\"]",
-    "PWInputIdentifier": "[aria-label=\"Password\"]",
-    "loginBTNIdentifier": "button._acap._acas._aj1-._ap30",
-    "saveBTNIdentifier": "button._acap._acas._aj1-._ap30"
-}
+    "UNInputCSS": "[aria-label=\"Phone number, username, or email\"]",
+    "PWInputCSS": "[aria-label=\"Password\"]",
+    "loginBTNCSS": "button._acap._acas._aj1-._ap30",
+    "notNowBTNCSS": "x1i10hfl"}
