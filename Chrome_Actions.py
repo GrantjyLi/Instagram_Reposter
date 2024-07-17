@@ -11,8 +11,11 @@ from selenium.webdriver.common.by import By
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.common.exceptions import NoSuchElementException
 
-accUsername = "justgrantnow"
-accPassword = "mypw4Grant4GradeRep"
+with open('Insta_Tag_Names.json') as tagFile:
+    tagData = json.load(tagFile)
+
+with open('Accounts.json') as accFile:
+    accData = json.load(accFile)
 
 options = Options()
 options.add_experimental_option("detach", True) #leaves window open when done
@@ -20,11 +23,8 @@ options.add_experimental_option("detach", True) #leaves window open when done
 #part of setup
 driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
 
-with open('Insta_Tag_Names.json') as file:
-    tagData = json.load(file)
-
 def loginInstagram():
-
+    print("Logging in")
     instagramURL = tagData["instagramURL"]
     driver.get(instagramURL)
 
@@ -35,28 +35,31 @@ def loginInstagram():
         pwInput = driver.find_element(By.CSS_SELECTOR, tagData["PWInputCSS"])
         loginBTN = driver.find_element(By.CSS_SELECTOR, tagData["loginBTNCSS"])
 
-        unInput.send_keys(accUsername)
-        pwInput.send_keys(accPassword)
+        unInput.send_keys(accData["accUsername"])
+        pwInput.send_keys(accData["accPassword"])
         loginBTN.click()
 
-        print("Logging in")
     except NoSuchElementException:
         print("Cannot Load Instagram Login")
+        return
 
-    try: # save login info pop-up might happen
+    try:  # save login info pop-up might happen
         notNowBTN = WebDriverWait(driver, 10).until(
-            EC.presence_of_element_located((By.CSS_SELECTOR, tagData["saveBTNCSS"]))
+            EC.presence_of_element_located((By.CSS_SELECTOR, tagData["notNowLoginBTNCSS"]))
         )
-
-        notNowBTN = driver.find_element(By.CSS_SELECTOR, tagData["notNowBTNCSS"])
         notNowBTN.click()
-        print("Not saving Login")
 
     except NoSuchElementException:
         print("Login Already Saved")
 
+    try:
+        notNowNotifBTN = WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.CSS_SELECTOR, tagData["notNowNotifBTNCSS"]))
+        )
+        notNowNotifBTN.click()
+    except NoSuchElementException:
+        print("No Notification Pop-up")
 
-
-
+    print("Logged In")
 
 
