@@ -63,3 +63,10 @@ def loginInstagram():
     print("Logged In")
 
 
+def downloadContent():
+    print("Stealing Content...")
+
+    for account in accData["victimAccounts"]:
+        accURL = accData["accURLPrefix"] + account
+
+        driver.get(accURL)

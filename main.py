@@ -1,3 +1,3 @@
 from Chrome_Actions import *
 
-loginInstagram()
+downloadContent()
