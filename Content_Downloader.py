@@ -9,8 +9,6 @@ loader = instaloader.Instaloader()
 # Extract the shortcode from the URL
 # shortcode = post_url.split('/')[-2]
 
-
-
 #https://www.instagram.com/p/{SHORT_CODE_HERE}/
 def downloadFromShortCode(shortcode):
     saveFolder = 'Media'

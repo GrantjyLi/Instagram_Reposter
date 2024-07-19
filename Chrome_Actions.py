@@ -11,24 +11,24 @@ from selenium.webdriver.common.by import By
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.common.exceptions import NoSuchElementException
 
+#loading files
 with open('Insta_Tag_Names.json') as tagFile:
     tagData = json.load(tagFile)
 
 with open('Accounts.json') as accFile:
     accData = json.load(accFile)
 
+#setting up Web Driver
 options = Options()
 options.add_experimental_option("detach", True) #leaves window open when done
-
-#part of setup
 driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
 
 def loginInstagram():
     print("Logging in")
     instagramURL = tagData["instagramURL"]
-    driver.get(instagramURL)
+    driver.get(instagramURL) # opening up instagram
 
-    try:
+    try: # entering credentials and logging in
         unInput = WebDriverWait(driver, 10).until(
             EC.presence_of_element_located((By.CSS_SELECTOR, tagData["UNInputCSS"]))
         )
@@ -43,7 +43,7 @@ def loginInstagram():
         print("Cannot Load Instagram Login")
         return
 
-    try:  # save login info pop-up might happen
+    try:  # "save login" info pop-up might happen
         notNowBTN = WebDriverWait(driver, 10).until(
             EC.presence_of_element_located((By.CSS_SELECTOR, tagData["notNowLoginBTNCSS"]))
         )
@@ -52,7 +52,7 @@ def loginInstagram():
     except NoSuchElementException:
         print("Login Already Saved")
 
-    try:
+    try: # "not-now" info pop-up might happen
         notNowNotifBTN = WebDriverWait(driver, 10).until(
             EC.presence_of_element_located((By.CSS_SELECTOR, tagData["notNowNotifBTNCSS"]))
         )
@@ -66,7 +66,20 @@ def loginInstagram():
 def downloadContent():
     print("Stealing Content...")
 
+    #going through each account
     for account in accData["victimAccounts"]:
+        print("Stealing from: " + account)
         accURL = accData["accURLPrefix"] + account
 
         driver.get(accURL)
+
+        allPosts = WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.CSS_SELECTOR, tagData["mediaPostClass"]))
+        )
+
+        allPosts = driver.find_elements(By.CSS_SELECTOR, tagData["mediaPostClass"])
+
+        for post in allPosts:
+            link = post.get_attribute('href')
+            if link:
+                print(link)
