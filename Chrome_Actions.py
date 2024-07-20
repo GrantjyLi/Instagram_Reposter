@@ -62,24 +62,3 @@ def loginInstagram():
 
     print("Logged In")
 
-
-def downloadContent():
-    print("Stealing Content...")
-
-    #going through each account
-    for account in accData["victimAccounts"]:
-        print("Stealing from: " + account)
-        accURL = accData["accURLPrefix"] + account
-
-        driver.get(accURL)
-
-        allPosts = WebDriverWait(driver, 10).until(
-            EC.presence_of_element_located((By.CSS_SELECTOR, tagData["mediaPostClass"]))
-        )
-
-        allPosts = driver.find_elements(By.CSS_SELECTOR, tagData["mediaPostClass"])
-
-        for post in allPosts:
-            link = post.get_attribute('href')
-            if link:
-                print(link)

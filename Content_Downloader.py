@@ -21,3 +21,8 @@ def downloadFromShortCode(shortcode):
 
     print("https://www.instagram.com/p/"+ shortcode +"/ downloaded")
 
+def downloadAccountMedia(account):
+    profile = instaloader.Profile.from_username(loader.context, account)
+
+    for post in profile.get_posts():
+        print(post)
