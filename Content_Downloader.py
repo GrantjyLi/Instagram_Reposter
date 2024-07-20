@@ -1,13 +1,11 @@
 #pip install instaloader
 
-import instaloader
+import instaloader # GOAT!!!!!!
 import os
 
 # Initialize Instaloader
 loader = instaloader.Instaloader()
-
-# Extract the shortcode from the URL
-# shortcode = post_url.split('/')[-2]
+loader.login("justgrantnow", "mypw4Grant4GradeRep") # note necessary, but good to avoid rate limit
 
 #https://www.instagram.com/p/{SHORT_CODE_HERE}/
 def downloadFromShortCode(shortcode):
@@ -26,3 +24,4 @@ def downloadAccountMedia(account):
 
     for post in profile.get_posts():
         print(post)
+        print(post.date)
