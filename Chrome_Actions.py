@@ -15,7 +15,7 @@ from selenium.common.exceptions import NoSuchElementException
 with open('Insta_Tag_Names.json') as tagFile:
     tagData = json.load(tagFile)
 
-with open('Accounts.json') as accFile:
+with open('Host_Account.json') as accFile:
     accData = json.load(accFile)
 
 #setting up Web Driver
