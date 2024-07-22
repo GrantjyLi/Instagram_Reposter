@@ -2,6 +2,7 @@
 #pip install webdriver-manager
 
 import json
+import os
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
@@ -24,7 +25,7 @@ options.add_experimental_option("detach", True) #leaves window open when done
 driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
 
 def loginInstagram():
-    print("Logging in")
+    print("Logging in...")
     instagramURL = tagData["instagramURL"]
     driver.get(instagramURL) # opening up instagram
 
@@ -62,3 +63,18 @@ def loginInstagram():
 
     print("Logged In")
 
+def uploadMedia():
+    print("Uploading...")
+    uploadBTN = driver.find_element(By.CSS_SELECTOR, tagData["postIcon"])
+
+
+
+    uploadBTN.click()
+
+
+def getMedia():
+    returnMedia = []
+    for name in os.listdir("Media"):
+        print(name + "===========")
+        for file in os.listdir(os.path.join("Media", name)):
+            print(file)

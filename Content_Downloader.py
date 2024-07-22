@@ -10,22 +10,24 @@ with open('Victim_Data.json') as victimFile: # getting victim data folder
 with open('Host_Account.json') as accFile: # getting victim data folder
     accData = json.load(accFile)
 
-saveFolder = 'Media'
-os.makedirs(saveFolder, exist_ok=True) # making the default download folder Media
-os.chdir(saveFolder)
-
 # Initialize Instaloader
 loader = instaloader.Instaloader()
 loader.login(accData["accUsername"], accData["accPassword"]) # note necessary, but good to avoid rate limit
 
-downloadLim = victimData["dowonloadLimit"]
+downloadLim = victimData["downloadLimit"]
 
 def downloadAllAccounts():
+    saveFolder = 'Media'
+    os.makedirs(saveFolder, exist_ok=True)  # making the default download folder Media
+    os.chdir(saveFolder)
+
     victims = victimData["victimNames"]
     for victim in victims:
         print("downloading from " + victim)
         downloadAccountMedia(victim)
         print("===========================================\n")
+
+    os.chdir("../")
 
     with open('Victim_Data.json', 'w') as victimFile:
         json.dump(victimData, victimFile, indent=2)
@@ -36,10 +38,12 @@ def downloadAccountMedia(account):
     profile = instaloader.Profile.from_username(loader.context, account)
 
     downloadCount = 0
-    latestPostDate = None;
+    latestPostDate = None
+    oldestPostGot = None
 
     for post in profile.get_posts():
         if downloadCount >= downloadLim:
+            oldestPostGot = post.date.strftime('%Y-%m-%d %H:%M:%S')
             break
         elif downloadCount == 0:
             latestPostDate = post.date.strftime('%Y-%m-%d %H:%M:%S')
@@ -50,6 +54,7 @@ def downloadAccountMedia(account):
     postStolenData = {}
     postStolenData["postsStolen"] = downloadCount
     postStolenData["lastestPostStolen"] = latestPostDate
+    postStolenData["oldestPostStolen"] = oldestPostGot
 
     victimData[account] = postStolenData
 
