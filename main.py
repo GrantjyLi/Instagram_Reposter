@@ -1,8 +1,6 @@
 from Chrome_Actions import *
 from Content_Downloader import *
 
-#loginInstagram()
+loginInstagram()
 #downloadAllAccounts()
-#uploadMedia()
-
-getMedia()
+uploadMedia()

@@ -44,6 +44,16 @@ def loginInstagram():
         print("Cannot Load Instagram Login")
         return
 
+    #================THEY SUSPECT AUTOMATED BEHAVIOR=============
+    try:
+        dismissBTN = WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.CSS_SELECTOR, tagData["dismissBTNCSS"]))
+        )
+        dismissBTN.click()
+    except NoSuchElementException:
+        print("Didn't have to dismiss")
+    #============================================================
+
     try:  # "save login" info pop-up might happen
         notNowBTN = WebDriverWait(driver, 10).until(
             EC.presence_of_element_located((By.CSS_SELECTOR, tagData["notNowLoginBTNCSS"]))
@@ -67,14 +77,57 @@ def uploadMedia():
     print("Uploading...")
     uploadBTN = driver.find_element(By.CSS_SELECTOR, tagData["postIcon"])
 
-
-
-    uploadBTN.click()
-
-
-def getMedia():
-    returnMedia = []
     for name in os.listdir("Media"):
+        filePath = os.path.join(os.getcwd(), "Media", name)
         print(name + "===========")
+        images = []
+        videos = []
+
+        uploadBTN.click()
+
         for file in os.listdir(os.path.join("Media", name)):
-            print(file)
+            fileType = os.path.splitext(file)[1]
+            if fileType == '.mp4':
+                videos.append(filePath + file)
+            elif fileType == '.jpg':
+                images.append(filePath + file)
+
+        fileUpload = WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.CSS_SELECTOR, tagData["fileInput"]))
+        )
+
+        if len(videos) > 0:
+            print(videos)
+
+            fileUpload.send_keys("\n".join(videos))
+        else:
+            print(images)
+            fileUpload.send_keys("\n".join(images))
+
+        return
+
+"""
+getting each post and distinguishing it as a:
+    image               1 x jpg
+    image carousel      multiple jpg
+    video               1 x mp4
+    video carousel      multiple mp4
+"""
+# def getMedia():
+#
+#     for name in os.listdir("Media"):
+#         print(name + "===========")
+#         images = []
+#         videos = []
+#
+#         for file in os.listdir(os.path.join("Media", name)):
+#             fileType = os.path.splitext(file)[1]
+#             if fileType == '.mp4':
+#                 videos.append(file)
+#             elif fileType == '.jpg':
+#                 images.append(file)
+#
+#         if len(videos) > 0:
+#             print(videos)
+#         else:
+#           print(images)
