@@ -10,7 +10,7 @@ from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from webdriver_manager.chrome import ChromeDriverManager
-from selenium.common.exceptions import NoSuchElementException
+from selenium.common.exceptions import NoSuchElementException, TimeoutException
 
 #loading files
 with open('Insta_Tag_Names.json') as tagFile:
@@ -52,19 +52,20 @@ def loginInstagram():
         )
         dismissBTN.click()
         print("Dismissed Automated behavior")
-    except NoSuchElementException:
+    except NoSuchElementException or TimeoutException:
         print("Didn't have to dismiss")
     #============================================================
 
-    try:  # "save login" info pop-up might happen
-        notNowBTN = WebDriverWait(driver, 10).until(
-            EC.presence_of_element_located((By.CSS_SELECTOR, tagData["notNowLoginBTNCSS"]))
-        )
-        notNowBTN.click()
-        print("No save Login")
+    # try:  # "save login" info pop-up might happen
+    #     notNowBTN = WebDriverWait(driver, 10).until(
+    #         EC.presence_of_element_located((By.CSS_SELECTOR, tagData["notNowLoginBTNCSS"]))
+    #     )
+    #     notNowBTN.click()
+    #     print("No save Login")
+    #
+    # except NoSuchElementException or TimeoutException:
+    #     print("Login Already Saved")
 
-    except NoSuchElementException:
-        print("Login Already Saved")
 
     try: # "not-now" info pop-up might happen
         notNowNotifBTN = WebDriverWait(driver, 10).until(
@@ -72,7 +73,7 @@ def loginInstagram():
         )
         notNowNotifBTN.click()
         print("No notifications please")
-    except NoSuchElementException:
+    except NoSuchElementException or TimeoutException:
         print("No Notification Pop-up")
 
 
@@ -91,9 +92,9 @@ def uploadMedia():
         for file in os.listdir(os.path.join("Media", name)):
             fileType = os.path.splitext(file)[1]
             if fileType == '.mp4':
-                videos.append(filePath + file)
+                videos.append(os.path.join(filePath, file))
             elif fileType == '.jpg':
-                images.append(filePath + file)
+                images.append(os.path.join(filePath, file))
 
         fileUpload = WebDriverWait(driver, 10).until(
             EC.presence_of_element_located((By.CSS_SELECTOR, tagData["fileInput"]))
