@@ -39,6 +39,7 @@ def loginInstagram():
         unInput.send_keys(accData["accUsername"])
         pwInput.send_keys(accData["accPassword"])
         loginBTN.click()
+        print("Logged In")
 
     except NoSuchElementException:
         print("Cannot Load Instagram Login")
@@ -50,6 +51,7 @@ def loginInstagram():
             EC.presence_of_element_located((By.CSS_SELECTOR, tagData["dismissBTNCSS"]))
         )
         dismissBTN.click()
+        print("Dismissed Automated behavior")
     except NoSuchElementException:
         print("Didn't have to dismiss")
     #============================================================
@@ -59,6 +61,7 @@ def loginInstagram():
             EC.presence_of_element_located((By.CSS_SELECTOR, tagData["notNowLoginBTNCSS"]))
         )
         notNowBTN.click()
+        print("No save Login")
 
     except NoSuchElementException:
         print("Login Already Saved")
@@ -68,10 +71,10 @@ def loginInstagram():
             EC.presence_of_element_located((By.CSS_SELECTOR, tagData["notNowNotifBTNCSS"]))
         )
         notNowNotifBTN.click()
+        print("No notifications please")
     except NoSuchElementException:
         print("No Notification Pop-up")
 
-    print("Logged In")
 
 def uploadMedia():
     print("Uploading...")
