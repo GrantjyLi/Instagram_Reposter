@@ -89,14 +89,15 @@ def uploadMedia():
     print("Uploading...") # get upload button
     uploadBTN = driver.find_element(By.CSS_SELECTOR, tagData["postIconSVG"])
 
-    for name in os.listdir("Media"):
-        filePath = os.path.join(os.getcwd(), "Media", name)
+    for name in os.listdir("Media"): # looping through each post in /Media
+        filePath = os.path.join(os.getcwd(), "Media", name) # getting file path
         print(name + "===========")
-        images = []
+        images = [] # collecting images and videos of the post
         videos = []
 
         uploadBTN.click()
 
+        # looping through each file from the post
         for file in os.listdir(os.path.join("Media", name)):
             fileType = os.path.splitext(file)[1]
             if fileType == '.mp4':
@@ -106,14 +107,15 @@ def uploadMedia():
 
         fileUpload = waitElementCSS(tagData["fileINPUT"])
 
+        #if there are videos, it ignores all photos
         if len(videos) > 0:
             print(videos)
-
             fileUpload.send_keys("\n".join(videos))
         else:
             print(images)
             fileUpload.send_keys("\n".join(images))
 
+        #=============POSTING PROCESS =========================
         reelsBTN = waitElementCSS(tagData["postedAsReelsBTN"])
         if reelsBTN:
             reelsBTN.click()
@@ -129,6 +131,7 @@ def uploadMedia():
         closeSVG = waitElementCSS(tagData["closeUploadSVG"])
         if closeSVG:
             closeSVG.click()
+        #========================================================
 
 """
 getting each post and distinguishing it as a:

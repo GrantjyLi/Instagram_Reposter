@@ -18,7 +18,7 @@ downloadLim = victimData["downloadLimit"]
 
 def downloadAllAccounts():
     saveFolder = 'Media'
-    os.makedirs(saveFolder, exist_ok=True)  # making the default download folder Media
+    os.makedirs(saveFolder, exist_ok=True)# making the working directory /Media for downloads
     os.chdir(saveFolder)
 
     victims = victimData["victimNames"]
@@ -27,11 +27,11 @@ def downloadAllAccounts():
         downloadAccountMedia(victim)
         print("===========================================\n")
 
-    os.chdir("../")
+    os.chdir("../") # making the working directory the main
 
+    #updating victimData with new data from posts
     with open('Victim_Data.json', 'w') as victimFile:
         json.dump(victimData, victimFile, indent=2)
-
 
 
 def downloadAccountMedia(account):
