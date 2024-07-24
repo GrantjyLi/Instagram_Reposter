@@ -1,5 +1,5 @@
 {
-    "elementWaitTime": 7,
+    "elementWaitTime": 5,
     "instagramURL": "https://www.instagram.com/accounts/login/?hl=en",
     "unINPUT": "input[aria-label=\"Phone number, username, or email\"]",
     "pwINPUT": "input[aria-label=\"Password\"]",

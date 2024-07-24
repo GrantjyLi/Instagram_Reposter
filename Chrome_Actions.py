@@ -3,6 +3,7 @@
 
 import json
 import os
+import sys
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
@@ -26,12 +27,13 @@ driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), opti
 
 waitTime = tagData["elementWaitTime"] # seconds
 #helper function to get elements that have to be waited
-def waitElementCSS(tag):
+def waitElementCSS(tag, errorMessage):
     try:
         return WebDriverWait(driver, waitTime).until(
                 EC.presence_of_element_located((By.CSS_SELECTOR, tag))
             )
     except TimeoutException or NoSuchElementException:
+        print(errorMessage)
         return None
 
 def loginInstagram():
@@ -40,7 +42,7 @@ def loginInstagram():
     driver.get(instagramURL) # opening up instagram
 
     #entering credentials and logging in
-    unInput = waitElementCSS(tagData["unINPUT"])
+    unInput = waitElementCSS(tagData["unINPUT"], "1) Cannot Load Instagram Login")
     if unInput:
 
         pwInput = driver.find_element(By.CSS_SELECTOR, tagData["pwINPUT"])
@@ -49,40 +51,30 @@ def loginInstagram():
         unInput.send_keys(accData["accUsername"])
         pwInput.send_keys(accData["accPassword"])
         loginBTN.click()
-        print("Logged In")
+        print("0) Logged In")
     else:
-        print("Cannot Load Instagram Login")
-        return
-
+        print("1) Cannot load Instagram")
+        sys.exit(0)
 
     #================THEY SUSPECT AUTOMATED BEHAVIOR=============
     #dismiss button
-    dismissBTN = waitElementCSS(tagData["dismissBTN"])
+    dismissBTN = waitElementCSS(tagData["dismissBTN"], "1) Didn't have to dismiss")
     if dismissBTN:
         dismissBTN.click()
-        print("Dismissed Automated behavior")
-    else:
-        print("Didn't have to dismiss")
-        return
+        print("0) Dismissed Automated behavior")
     #============================================================
 
     # "save login" info pop-up might happen
-    notNowBTN = waitElementCSS(tagData["notNowloginBTN"])
+    notNowBTN = waitElementCSS(tagData["notNowloginBTN"], "1) Login Already Saved")
     if notNowBTN:
         notNowBTN.click()
-        print("No save Login")
-    else:
-        print("Login Already Saved")
-        return
+        print("0) No save Login")
 
     # "not-now" info pop-up might happen
-    notNowNotifBTN = waitElementCSS(tagData["notNowNotifBTN"])
+    notNowNotifBTN = waitElementCSS(tagData["notNowNotifBTN"], "1) No Notification Pop-up")
     if notNowNotifBTN:
         notNowNotifBTN.click()
-        print("No notifications please")
-    else:
-        print("No Notification Pop-up")
-        return
+        print("0) No notifications please")
 
 
 def uploadMedia():
@@ -105,7 +97,7 @@ def uploadMedia():
             elif fileType == '.jpg':
                 images.append(os.path.join(filePath, file))
 
-        fileUpload = waitElementCSS(tagData["fileINPUT"])
+        fileUpload = waitElementCSS(tagData["fileINPUT"], "Couldn't upload file")
 
         #if there are videos, it ignores all photos
         if len(videos) > 0:
@@ -116,19 +108,18 @@ def uploadMedia():
             fileUpload.send_keys("\n".join(images))
 
         #=============POSTING PROCESS =========================
-        reelsBTN = waitElementCSS(tagData["postedAsReelsBTN"])
+        reelsBTN = waitElementCSS(tagData["postedAsReelsBTN"], "Couldn't process Reel")
         if reelsBTN:
             reelsBTN.click()
 
         for i in range(3):
-            uploadBTN = waitElementCSS(tagData["uploadNextBTN"])
+            uploadBTN = waitElementCSS(tagData["uploadNextBTN"], "Cannot upload: phase #" + str(i))
             if uploadBTN:
                 uploadBTN.click()
             else:
-                print("Cannot upload: phase #" + str(i))
                 return
 
-        closeSVG = waitElementCSS(tagData["closeUploadSVG"])
+        closeSVG = waitElementCSS(tagData["closeUploadSVG"], "Couldn't exit upload")
         if closeSVG:
             closeSVG.click()
         #========================================================
