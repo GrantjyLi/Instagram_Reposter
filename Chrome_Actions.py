@@ -24,15 +24,24 @@ options = Options()
 options.add_experimental_option("detach", True) #leaves window open when done
 driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
 
+#helper function to get elements that have to be waited
+def waitElementCSS(tag):
+    try:
+        return WebDriverWait(driver, 10).until(
+                EC.presence_of_element_located((By.CSS_SELECTOR, tag))
+            )
+    except TimeoutException or NoSuchElementException:
+        return None
+
 def loginInstagram():
     print("Logging in...")
     instagramURL = tagData["instagramURL"]
     driver.get(instagramURL) # opening up instagram
 
-    try: # entering credentials and logging in
-        unInput = WebDriverWait(driver, 10).until(
-            EC.presence_of_element_located((By.CSS_SELECTOR, tagData["UNInputCSS"]))
-        )
+    #entering credentials and logging in
+    unInput = waitElementCSS(tagData["UNInputCSS"])
+    if unInput:
+
         pwInput = driver.find_element(By.CSS_SELECTOR, tagData["PWInputCSS"])
         loginBTN = driver.find_element(By.CSS_SELECTOR, tagData["loginBTNCSS"])
 
@@ -40,45 +49,43 @@ def loginInstagram():
         pwInput.send_keys(accData["accPassword"])
         loginBTN.click()
         print("Logged In")
-
-    except NoSuchElementException:
+    else:
         print("Cannot Load Instagram Login")
         return
 
+
     #================THEY SUSPECT AUTOMATED BEHAVIOR=============
-    try:
-        dismissBTN = WebDriverWait(driver, 10).until(
-            EC.presence_of_element_located((By.CSS_SELECTOR, tagData["dismissBTNCSS"]))
-        )
+    #dismiss button
+    dismissBTN = waitElementCSS(tagData["dismissBTNCSS"])
+    if dismissBTN:
         dismissBTN.click()
         print("Dismissed Automated behavior")
-    except NoSuchElementException or TimeoutException:
+    else:
         print("Didn't have to dismiss")
+        return
     #============================================================
 
-    # try:  # "save login" info pop-up might happen
-    #     notNowBTN = WebDriverWait(driver, 10).until(
-    #         EC.presence_of_element_located((By.CSS_SELECTOR, tagData["notNowLoginBTNCSS"]))
-    #     )
-    #     notNowBTN.click()
-    #     print("No save Login")
-    #
-    # except NoSuchElementException or TimeoutException:
-    #     print("Login Already Saved")
+    # "save login" info pop-up might happen
+    notNowBTN = waitElementCSS(tagData["notNowLoginBTNCSS"])
+    if notNowBTN:
+        notNowBTN.click()
+        print("No save Login")
+    else:
+        print("Login Already Saved")
+        return
 
-
-    try: # "not-now" info pop-up might happen
-        notNowNotifBTN = WebDriverWait(driver, 10).until(
-            EC.presence_of_element_located((By.CSS_SELECTOR, tagData["notNowNotifBTNCSS"]))
-        )
+    # "not-now" info pop-up might happen
+    notNowNotifBTN = waitElementCSS(tagData["notNowNotifBTNCSS"])
+    if notNowNotifBTN:
         notNowNotifBTN.click()
         print("No notifications please")
-    except NoSuchElementException or TimeoutException:
+    else:
         print("No Notification Pop-up")
+        return
 
 
 def uploadMedia():
-    print("Uploading...")
+    print("Uploading...") # get upload button
     uploadBTN = driver.find_element(By.CSS_SELECTOR, tagData["postIcon"])
 
     for name in os.listdir("Media"):
@@ -96,9 +103,7 @@ def uploadMedia():
             elif fileType == '.jpg':
                 images.append(os.path.join(filePath, file))
 
-        fileUpload = WebDriverWait(driver, 10).until(
-            EC.presence_of_element_located((By.CSS_SELECTOR, tagData["fileInput"]))
-        )
+        fileUpload = waitElementCSS(tagData["fileInput"])
 
         if len(videos) > 0:
             print(videos)
@@ -108,7 +113,24 @@ def uploadMedia():
             print(images)
             fileUpload.send_keys("\n".join(images))
 
-        return
+        reelsBTN = waitElementCSS(tagData["postedAsReelsBTN"])
+        if reelsBTN:
+            reelsBTN.click()
+
+        uploadBTN = waitElementCSS(tagData["uploadNextBTN"])
+
+        if uploadBTN:
+            uploadBTN.click()
+            uploadBTN.click()
+            uploadBTN.click()
+        else:
+            print("Cannot upload")
+            return
+
+        closeSVG = waitElementCSS(tagData["closeUploadSVG"])
+
+        if closeSVG:
+            closeSVG.click()
 
 """
 getting each post and distinguishing it as a:
@@ -117,21 +139,3 @@ getting each post and distinguishing it as a:
     video               1 x mp4
     video carousel      multiple mp4
 """
-# def getMedia():
-#
-#     for name in os.listdir("Media"):
-#         print(name + "===========")
-#         images = []
-#         videos = []
-#
-#         for file in os.listdir(os.path.join("Media", name)):
-#             fileType = os.path.splitext(file)[1]
-#             if fileType == '.mp4':
-#                 videos.append(file)
-#             elif fileType == '.jpg':
-#                 images.append(file)
-#
-#         if len(videos) > 0:
-#             print(videos)
-#         else:
-#           print(images)
