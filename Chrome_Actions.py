@@ -116,8 +116,8 @@ def uploadMedia():
             uploadBTN = waitElementCSS(tagData["uploadNextBTN"], "Cannot upload: phase #" + str(i))
             if uploadBTN:
                 uploadBTN.click()
-            else:
-                return
+
+        print("Uploaded")
 
         closeSVG = waitElementCSS(tagData["closeUploadSVG"], "Couldn't exit upload")
         if closeSVG:
