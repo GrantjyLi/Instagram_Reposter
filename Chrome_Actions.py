@@ -81,48 +81,56 @@ def uploadMedia():
     print("Uploading...") # get upload button
     uploadBTN = driver.find_element(By.CSS_SELECTOR, tagData["postIconSVG"])
 
-    for name in os.listdir("Media"): # looping through each post in /Media
-        filePath = os.path.join(os.getcwd(), "Media", name) # getting file path
-        print(name + "===========")
-        images = [] # collecting images and videos of the post
-        videos = []
-
+    for postName in os.listdir("Media"): # looping through each post in /Media
+        print(postName + "===========")
         uploadBTN.click()
 
-        # looping through each file from the post
-        for file in os.listdir(os.path.join("Media", name)):
-            fileType = os.path.splitext(file)[1]
-            if fileType == '.mp4':
-                videos.append(os.path.join(filePath, file))
-            elif fileType == '.jpg':
-                images.append(os.path.join(filePath, file))
+        uploadPost(postName)
 
-        fileUpload = waitElementCSS(tagData["fileINPUT"], "Couldn't upload file")
+def uploadPost(name):
+    filePath = os.path.join(os.getcwd(), "Media", name)  # getting file path
+    images = []  # collecting images and videos of the post
+    videos = []
 
-        #if there are videos, it ignores all photos
-        if len(videos) > 0:
-            print(videos)
-            fileUpload.send_keys("\n".join(videos))
-        else:
-            print(images)
-            fileUpload.send_keys("\n".join(images))
+    # looping through each file from the post
+    for file in os.listdir(os.path.join("Media", name)):
+        fileType = os.path.splitext(file)[1]
+        if fileType == '.mp4':
+            videos.append(os.path.join(filePath, file))
+        elif fileType == '.jpg':
+            images.append(os.path.join(filePath, file))
 
-        #=============POSTING PROCESS =========================
-        reelsBTN = waitElementCSS(tagData["postedAsReelsBTN"], "Couldn't process Reel")
-        if reelsBTN:
-            reelsBTN.click()
+    fileUpload = waitElementCSS(tagData["fileINPUT"], "Couldn't upload file")
 
-        for i in range(3):
-            uploadBTN = waitElementCSS(tagData["uploadNextBTN"], "Cannot upload: phase #" + str(i))
-            if uploadBTN:
-                uploadBTN.click()
+    # if there are videos, it ignores all photos
+    if len(videos) > 0:
+        print(videos)
+        fileUpload.send_keys("\n".join(videos))
+    else:
+        print(images)
+        fileUpload.send_keys("\n".join(images))
 
-        print("Uploaded")
+    # =============POSTING PROCESS =========================
+    reelsBTN = waitElementCSS(tagData["postedAsReelsBTN"], "Couldn't process Reel") # if it is a reel
+    if reelsBTN:
+        reelsBTN.click()
 
-        closeSVG = waitElementCSS(tagData["closeUploadSVG"], "Couldn't exit upload")
-        if closeSVG:
-            closeSVG.click()
-        #========================================================
+    i = 0
+    driver.explicit_wait(5)
+    while i < 3:
+        uploadBTN = waitElementCSS(tagData["uploadNextBTN"], "Cannot upload: phase #" + str(i))
+        if uploadBTN:
+            uploadBTN.click()
+            i += 1
+            driver.implicitly_wait(3)
+        driver.refresh()
+
+    print("Uploaded")
+
+    closeSVG = waitElementCSS(tagData["closeUploadSVG"], "Couldn't exit upload")
+    if closeSVG:
+        closeSVG.click()
+    # ========================================================
 
 """
 getting each post and distinguishing it as a:
