@@ -85,7 +85,6 @@ def uploadMedia():
         uploadBTN.click()
 
         uploadPost(postName)
-
 def uploadPost(name):
     filePath = os.path.join(os.getcwd(), "Media", name)  # getting file path
     images = []  # collecting images and videos of the post

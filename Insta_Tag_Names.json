@@ -1,17 +1,16 @@
 {
     "elementWaitTime": 7,
     "instagramURL": "https://www.instagram.com/accounts/login/?hl=en",
-    "unINPUT": "//*[@id=\"loginForm\"]/div/div[1]/div/label/input",
-    "pwINPUT": "//*[@id=\"loginForm\"]/div/div[2]/div/label/input",
-    "loginBTN": "//*[@id=\"loginForm\"]/div/div[3]/button",
-    "dismissBTN": "div[aria-label=\"Dismiss\"]",
+    "unINPUT": "/html/body/div[2]/div/div/div[2]/div/div/div[1]/div[1]/div/section/main/article/div[2]/div[1]/div[2]/form/div/div[1]/div/label/input",
+    "pwINPUT": "/html/body/div[2]/div/div/div[2]/div/div/div[1]/div[1]/div/section/main/article/div[2]/div[1]/div[2]/form/div/div[2]/div/label/input",
+    "loginBTN": "/html/body/div[2]/div/div/div[2]/div/div/div[1]/div[1]/div/section/main/article/div[2]/div[1]/div[2]/form/div/div[3]/button",
+    "dismissBTN": "//*[@id=\"mount_0_0_7q\"]/div/div/div[2]/div/div/div[1]/section/main/div[2]/div/div/div/div/div[1]/div/div/div[2]/div[2]/div/div[1]/div/span",
     "notNowloginBTN": "//*[@id=\"mount_0_0_Ov\"]/div/div/div[2]/div/div/div[1]/div[1]/div[1]/section/main/div/div/div/div/div",
-    "notNowNotifBTN": "button._a9--._ap36._a9_1",
-    "postIconSVG": "//*[@id=\"mount_0_0_lM\"]/div/div/div[2]/div/div/div[1]/div[1]/div[2]/div/div/div/div/div[2]/div[7]/div/span/div/a/div/div[1]/div/div/svg",
+    "notNowNotifBTN": "/html/body/div[2]/div[1]/div/div[2]/div/div/div/div/div[2]/div/div/div[3]/button[2]",
+    "postIconSVG": "/html/body/div[1]/div/div/div[2]/div/div/div[1]/div[1]/div[2]/div/div/div/div/div[2]/div[7]/div/span/div/a/div/div[1]/div/div/svg",
     "fileINPUT": "/html/body/div[5]/div[1]/div/div[3]/div/div/div/div/div/div/div/div[2]/div[1]/form/input",
     "postedAsReelsBTN": "/html/body/div[5]/div[2]/div/div/div[1]/div/div[2]/div/div/div/div/div[2]/div/div/div[3]/div/div[4]/button",
     "uploadNextBTN": "/html/body/div[5]/div[1]/div/div[3]/div/div/div/div/div/div/div/div[1]/div/div/div/div[3]/div/div",
     "closeUploadSVG": "/html/body/div[5]/div[1]/div/div[2]/div/div/svg"
-
 
 }
