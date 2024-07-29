@@ -27,10 +27,10 @@ driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), opti
 
 waitTime = tagData["elementWaitTime"] # seconds
 #helper function to get elements that have to be waited
-def waitElementCSS(tag, errorMessage):
+def waitElementXPATH(tag, errorMessage):
     try:
         return WebDriverWait(driver, waitTime).until(
-                EC.presence_of_element_located((By.CSS_SELECTOR, tag))
+                EC.presence_of_element_located((By.XPATH, tag))
             )
     except TimeoutException or NoSuchElementException:
         print(errorMessage)
@@ -42,36 +42,35 @@ def loginInstagram():
     driver.get(instagramURL) # opening up instagram
 
     #entering credentials and logging in
-    unInput = waitElementCSS(tagData["unINPUT"], "1) Cannot Load Instagram Login")
+    unInput = waitElementXPATH(tagData["unINPUT"], "1) Cannot Load Instagram Login")
     if unInput:
 
-        pwInput = driver.find_element(By.CSS_SELECTOR, tagData["pwINPUT"])
-        loginBTN = driver.find_element(By.CSS_SELECTOR, tagData["loginBTN"])
+        pwInput = driver.find_element(By.XPATH, tagData["pwINPUT"])
+        loginBTN = driver.find_element(By.XPATH, tagData["loginBTN"])
 
         unInput.send_keys(accData["accUsername"])
         pwInput.send_keys(accData["accPassword"])
         loginBTN.click()
         print("0) Logged In")
     else:
-        print("1) Cannot load Instagram")
         sys.exit(0)
 
     #================THEY SUSPECT AUTOMATED BEHAVIOR=============
     #dismiss button
-    dismissBTN = waitElementCSS(tagData["dismissBTN"], "1) Didn't have to dismiss")
+    dismissBTN = waitElementXPATH(tagData["dismissBTN"], "1) Didn't have to dismiss")
     if dismissBTN:
         dismissBTN.click()
         print("0) Dismissed Automated behavior")
     #============================================================
 
     # "save login" info pop-up might happen
-    notNowBTN = waitElementCSS(tagData["notNowloginBTN"], "1) Login Already Saved")
+    notNowBTN = waitElementXPATH(tagData["notNowloginBTN"], "1) Login Already Saved")
     if notNowBTN:
         notNowBTN.click()
         print("0) No save Login")
 
     # "not-now" info pop-up might happen
-    notNowNotifBTN = waitElementCSS(tagData["notNowNotifBTN"], "1) No Notification Pop-up")
+    notNowNotifBTN = waitElementXPATH(tagData["notNowNotifBTN"], "1) No Notification Pop-up")
     if notNowNotifBTN:
         notNowNotifBTN.click()
         print("0) No notifications please")
@@ -79,7 +78,7 @@ def loginInstagram():
 
 def uploadMedia():
     print("Uploading...") # get upload button
-    uploadBTN = driver.find_element(By.CSS_SELECTOR, tagData["postIconSVG"])
+    uploadBTN = waitElementXPATH(tagData["postIconSVG"], "1) Cannot Find upload button")
 
     for postName in os.listdir("Media"): # looping through each post in /Media
         print(postName + "===========")
@@ -100,7 +99,7 @@ def uploadPost(name):
         elif fileType == '.jpg':
             images.append(os.path.join(filePath, file))
 
-    fileUpload = waitElementCSS(tagData["fileINPUT"], "Couldn't upload file")
+    fileUpload = waitElementXPATH(tagData["fileINPUT"], "Couldn't upload file")
 
     # if there are videos, it ignores all photos
     if len(videos) > 0:
@@ -111,14 +110,14 @@ def uploadPost(name):
         fileUpload.send_keys("\n".join(images))
 
     # =============POSTING PROCESS =========================
-    reelsBTN = waitElementCSS(tagData["postedAsReelsBTN"], "Couldn't process Reel") # if it is a reel
+    reelsBTN = waitElementXPATH(tagData["postedAsReelsBTN"], "Couldn't process Reel") # if it is a reel
     if reelsBTN:
         reelsBTN.click()
 
     i = 0
-    driver.explicit_wait(5)
+    driver.implicitly_wait(5)
     while i < 3:
-        uploadBTN = waitElementCSS(tagData["uploadNextBTN"], "Cannot upload: phase #" + str(i))
+        uploadBTN = waitElementXPATH(tagData["uploadNextBTN"], "Cannot upload: phase #" + str(i))
         if uploadBTN:
             uploadBTN.click()
             i += 1
@@ -127,7 +126,7 @@ def uploadPost(name):
 
     print("Uploaded")
 
-    closeSVG = waitElementCSS(tagData["closeUploadSVG"], "Couldn't exit upload")
+    closeSVG = waitElementXPATH(tagData["closeUploadSVG"], "Couldn't exit upload")
     if closeSVG:
         closeSVG.click()
     # ========================================================
@@ -138,4 +137,9 @@ getting each post and distinguishing it as a:
     image carousel      multiple jpg
     video               1 x mp4
     video carousel      multiple mp4
+
+my code will manuall loop through all files to figure out which type of post it is
+but instaloader does can return the post types: image, video, sidecar(carousel)
+
+since i need to distinguish between image and video carousel, I made my own filter method
 """
