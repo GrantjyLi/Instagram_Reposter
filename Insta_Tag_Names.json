@@ -1,16 +1,15 @@
 {
     "elementWaitTime": 7,
     "instagramURL": "https://www.instagram.com/accounts/login/?hl=en",
-    "unINPUT": "/html/body/div[2]/div/div/div[2]/div/div/div[1]/div[1]/div/section/main/article/div[2]/div[1]/div[2]/form/div/div[1]/div/label/input",
-    "pwINPUT": "/html/body/div[2]/div/div/div[2]/div/div/div[1]/div[1]/div/section/main/article/div[2]/div[1]/div[2]/form/div/div[2]/div/label/input",
-    "loginBTN": "/html/body/div[2]/div/div/div[2]/div/div/div[1]/div[1]/div/section/main/article/div[2]/div[1]/div[2]/form/div/div[3]/button",
-    "dismissBTN": "//*[@id=\"mount_0_0_7q\"]/div/div/div[2]/div/div/div[1]/section/main/div[2]/div/div/div/div/div[1]/div/div/div[2]/div[2]/div/div[1]/div/span",
-    "notNowloginBTN": "//*[@id=\"mount_0_0_Ov\"]/div/div/div[2]/div/div/div[1]/div[1]/div[1]/section/main/div/div/div/div/div",
-    "notNowNotifBTN": "/html/body/div[2]/div[1]/div/div[2]/div/div/div/div/div[2]/div/div/div[3]/button[2]",
-    "postIconSVG": "/html/body/div[1]/div/div/div[2]/div/div/div[1]/div[1]/div[2]/div/div/div/div/div[2]/div[7]/div/span/div/a/div/div[1]/div/div/svg",
-    "fileINPUT": "/html/body/div[5]/div[1]/div/div[3]/div/div/div/div/div/div/div/div[2]/div[1]/form/input",
-    "postedAsReelsBTN": "/html/body/div[5]/div[2]/div/div/div[1]/div/div[2]/div/div/div/div/div[2]/div/div/div[3]/div/div[4]/button",
-    "uploadNextBTN": "/html/body/div[5]/div[1]/div/div[3]/div/div/div/div/div/div/div/div[1]/div/div/div/div[3]/div/div",
-    "closeUploadSVG": "/html/body/div[5]/div[1]/div/div[2]/div/div/svg"
+    "unINPUT": "input[name='username']",
+    "pwINPUT": "input[name='password']",
+    "loginBTN": "button._acan._acap._acas._aj1-._ap30",
+    "dismissBTN": "div[aria-label='Dismiss']",
+    "notNowNotifBTN": "button._a9--._ap36._a9_1",
+    "postUploadSVG": "svg[aria-label='New post']",
+    "fileINPUT": "input._ac69",
+    "postedAsReelsBTN": "button._acan._acap._acaq._acas._acav._aj1-._ap30",
+    "uploadNextBTN": "div.x1i10hfl.xjqpnuy.xa49m3k.xqeqjp1.x2hbi6w.xdl72j9.x2lah0s.xe8uvvx.xdj266r.x11i5rnm.xat24cr.x1mh8g0r.x2lwn1j.xeuugli.x1hl2dhg.xggy1nq.x1ja2u2z.x1t137rt.x1q0g3np.x1lku1pv.x1a2a7pz.x6s0dn4.xjyslct.x1ejq31n.xd10rxx.x1sy0etr.x17r0tee.x9f619.x1ypdohk.x1f6kntn.xwhw2v2.xl56j7k.x17ydfre.x2b8uid.xlyipyv.x87ps6o.x14atkfc.xcdnw81.x1i0vuye.xjbqb8w.xm3z3ea.x1x8b98j.x131883w.x16mih1h.x972fbf.xcfux6l.x1qhh985.xm0m39n.xt0psk2.xt7dq6l.xexx8yu.x4uap5.x18d9i69.xkhd6sd.x1n2onr6.x1n5bzlp.x173jzuc.x1yc6y37[role='button']",
+    "closeUploadSVG": "svg[aria-label='Close']"
 
 }

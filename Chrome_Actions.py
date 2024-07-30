@@ -27,10 +27,10 @@ driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), opti
 
 waitTime = tagData["elementWaitTime"] # seconds
 #helper function to get elements that have to be waited
-def waitElementXPATH(tag, errorMessage):
+def waitElementCSS(tag, errorMessage):
     try:
         return WebDriverWait(driver, waitTime).until(
-                EC.presence_of_element_located((By.XPATH, tag))
+                EC.presence_of_element_located((By.CSS_SELECTOR, tag))
             )
     except TimeoutException or NoSuchElementException:
         print(errorMessage)
@@ -42,11 +42,11 @@ def loginInstagram():
     driver.get(instagramURL) # opening up instagram
 
     #entering credentials and logging in
-    unInput = waitElementXPATH(tagData["unINPUT"], "1) Cannot Load Instagram Login")
+    unInput = waitElementCSS(tagData["unINPUT"], "1) Cannot Load Instagram Login")
     if unInput:
 
-        pwInput = driver.find_element(By.XPATH, tagData["pwINPUT"])
-        loginBTN = driver.find_element(By.XPATH, tagData["loginBTN"])
+        pwInput = driver.find_element(By.CSS_SELECTOR, tagData["pwINPUT"])
+        loginBTN = driver.find_element(By.CSS_SELECTOR, tagData["loginBTN"])
 
         unInput.send_keys(accData["accUsername"])
         pwInput.send_keys(accData["accPassword"])
@@ -57,20 +57,14 @@ def loginInstagram():
 
     #================THEY SUSPECT AUTOMATED BEHAVIOR=============
     #dismiss button
-    dismissBTN = waitElementXPATH(tagData["dismissBTN"], "1) Didn't have to dismiss")
+    dismissBTN = waitElementCSS(tagData["dismissBTN"], "1) Didn't have to dismiss")
     if dismissBTN:
         dismissBTN.click()
         print("0) Dismissed Automated behavior")
     #============================================================
 
-    # "save login" info pop-up might happen
-    notNowBTN = waitElementXPATH(tagData["notNowloginBTN"], "1) Login Already Saved")
-    if notNowBTN:
-        notNowBTN.click()
-        print("0) No save Login")
-
     # "not-now" info pop-up might happen
-    notNowNotifBTN = waitElementXPATH(tagData["notNowNotifBTN"], "1) No Notification Pop-up")
+    notNowNotifBTN = waitElementCSS(tagData["notNowNotifBTN"], "1) No Notification Pop-up")
     if notNowNotifBTN:
         notNowNotifBTN.click()
         print("0) No notifications please")
@@ -78,10 +72,10 @@ def loginInstagram():
 
 def uploadMedia():
     print("Uploading...") # get upload button
-    uploadBTN = waitElementXPATH(tagData["postIconSVG"], "1) Cannot Find upload button")
+    uploadBTN = waitElementCSS(tagData["postUploadSVG"], "1) Cannot Find upload button")
 
     for postName in os.listdir("Media"): # looping through each post in /Media
-        print(postName + "===========")
+        print(postName)
         uploadBTN.click()
 
         uploadPost(postName)
@@ -98,8 +92,9 @@ def uploadPost(name):
         elif fileType == '.jpg':
             images.append(os.path.join(filePath, file))
 
-    fileUpload = waitElementXPATH(tagData["fileINPUT"], "Couldn't upload file")
+    fileUpload = waitElementCSS(tagData["fileINPUT"], "Couldn't upload file")
 
+    print("Files:")
     # if there are videos, it ignores all photos
     if len(videos) > 0:
         print(videos)
@@ -108,24 +103,28 @@ def uploadPost(name):
         print(images)
         fileUpload.send_keys("\n".join(images))
 
+    driver.implicitly_wait(3)
     # =============POSTING PROCESS =========================
-    reelsBTN = waitElementXPATH(tagData["postedAsReelsBTN"], "Couldn't process Reel") # if it is a reel
+    reelsBTN = waitElementCSS(tagData["postedAsReelsBTN"], "Couldn't process Reel") # if it is a reel
     if reelsBTN:
         reelsBTN.click()
+    else:
+        sys.exit(0)
 
     i = 0
-    driver.implicitly_wait(5)
     while i < 3:
-        uploadBTN = waitElementXPATH(tagData["uploadNextBTN"], "Cannot upload: phase #" + str(i))
+        uploadBTN = waitElementCSS(tagData["uploadNextBTN"], "Cannot upload: phase #" + str(i))
         if uploadBTN:
             uploadBTN.click()
             i += 1
             driver.implicitly_wait(3)
+        else:
+            sys.exit(0)
         driver.refresh()
 
     print("Uploaded")
 
-    closeSVG = waitElementXPATH(tagData["closeUploadSVG"], "Couldn't exit upload")
+    closeSVG = waitElementCSS(tagData["closeUploadSVG"], "Couldn't exit upload")
     if closeSVG:
         closeSVG.click()
     # ========================================================
