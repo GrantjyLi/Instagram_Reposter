@@ -69,6 +69,12 @@ def loginInstagram():
         notNowNotifBTN.click()
         print("0) No notifications please")
 
+    # "not-now" info pop-up might happen
+    dontSaveLoginBTN = waitElementCSS(tagData["dontSaveLoginBTN"], "Don't Save Login")
+    if dontSaveLoginBTN:
+        dontSaveLoginBTN.click()
+        print("0) Don't save login")
+
 
 def uploadMedia():
     print("Uploading...") # get upload button
@@ -105,22 +111,21 @@ def uploadPost(name):
 
     driver.implicitly_wait(3)
     # =============POSTING PROCESS =========================
-    reelsBTN = waitElementCSS(tagData["postedAsReelsBTN"], "Couldn't process Reel") # if it is a reel
+    reelsBTN = waitElementCSS(tagData["postedAsReelsBTN"], "1) No Reel Informatics Pop-up") # if it is a reel
     if reelsBTN:
         reelsBTN.click()
-    else:
-        sys.exit(0)
 
-    i = 0
-    while i < 3:
-        uploadBTN = waitElementCSS(tagData["uploadNextBTN"], "Cannot upload: phase #" + str(i))
-        if uploadBTN:
-            uploadBTN.click()
-            i += 1
-            driver.implicitly_wait(3)
-        else:
-            sys.exit(0)
-        driver.refresh()
+
+    for i in range(3):
+        driver.implicitly_wait(3)
+        buttons = driver.find_elements(By.CSS_SELECTOR, tagData["uploadNextBTN"])
+
+        for button in buttons:
+            if button.text == 'Next' or (i == 2 and button.text == 'Share'):
+                button.click()
+                i += 1
+                break
+
 
     print("Uploaded")
 
