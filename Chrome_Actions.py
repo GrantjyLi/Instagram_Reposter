@@ -4,6 +4,8 @@
 import json
 import os
 import sys
+import time
+
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
@@ -118,6 +120,7 @@ def uploadPost(name):
 
     for i in range(3):
         driver.implicitly_wait(3)
+        time.sleep(1)
         buttons = driver.find_elements(By.CSS_SELECTOR, tagData["uploadNextBTN"])
 
         for button in buttons:
