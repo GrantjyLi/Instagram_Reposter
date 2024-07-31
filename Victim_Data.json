@@ -1,17 +1,18 @@
 {
   "victimNames": [
-    "urination.nation",
-    "uncrustable.memess"
+    "justgrantnow","urination.nation"
   ],
   "downloadLimit": 1,
-  "urination.nation": {
-    "postsStolen": 1,
-    "lastestPostStolen": "2024-07-22 15:07:53",
-    "oldestPostStolen": "2024-07-22 14:43:34"
-  },
-  "uncrustable.memess": {
-    "postsStolen": 1,
-    "lastestPostStolen": "2024-03-06 14:56:58",
-    "oldestPostStolen": "2024-03-08 21:54:30"
+  "stolenVictimData": {
+    "urination.nation": {
+      "postsStolen": 1,
+      "lastestPostStolen": "2024-07-31 15:45:35",
+      "oldestPostStolen": "2024-07-31 14:42:39"
+    },
+    "justgrantnow": {
+      "postsStolen": 1,
+      "lastestPostStolen": "2022-06-29 22:36:02",
+      "oldestPostStolen": "2021-12-28 02:20:34"
+    }
   }
 }

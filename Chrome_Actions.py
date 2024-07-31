@@ -53,7 +53,6 @@ def loginInstagram():
         unInput.send_keys(accData["accUsername"])
         pwInput.send_keys(accData["accPassword"])
         loginBTN.click()
-        print("0) Logged In")
     else:
         sys.exit(0)
 
@@ -62,20 +61,17 @@ def loginInstagram():
     dismissBTN = waitElementCSS(tagData["dismissBTN"], "1) Didn't have to dismiss")
     if dismissBTN:
         dismissBTN.click()
-        print("0) Dismissed Automated behavior")
     #============================================================
 
     # "not-now" info pop-up might happen
     notNowNotifBTN = waitElementCSS(tagData["notNowNotifBTN"], "1) No Notification Pop-up")
     if notNowNotifBTN:
         notNowNotifBTN.click()
-        print("0) No notifications please")
 
     # "not-now" info pop-up might happen
-    dontSaveLoginBTN = waitElementCSS(tagData["dontSaveLoginBTN"], "Don't Save Login")
+    dontSaveLoginBTN = waitElementCSS(tagData["dontSaveLoginBTN"], "1) Don't Save Login")
     if dontSaveLoginBTN:
         dontSaveLoginBTN.click()
-        print("0) Don't save login")
 
 
 def uploadMedia():

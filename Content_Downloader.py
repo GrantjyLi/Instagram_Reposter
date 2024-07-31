@@ -12,7 +12,7 @@ with open('Host_Account.json') as accFile: # getting victim data folder
 
 # Initialize Instaloader
 loader = instaloader.Instaloader()
-loader.login(accData["accUsername"], accData["accPassword"]) # note necessary, but good to avoid rate limit
+#loader.login(accData["accUsername"], accData["accPassword"]) # note necessary, but good to avoid rate limit
 
 downloadLim = victimData["downloadLimit"]
 
@@ -27,7 +27,7 @@ def downloadAllAccounts():
         downloadAccountMedia(victim)
         print("===========================================\n")
 
-    os.chdir("../") # making the working directory the main
+    os.chdir("../") # making the working directory back to the main
 
     #updating victimData with new data from posts
     with open('Victim_Data.json', 'w') as victimFile:
@@ -56,7 +56,7 @@ def downloadAccountMedia(account):
     postStolenData["lastestPostStolen"] = latestPostDate
     postStolenData["oldestPostStolen"] = oldestPostGot
 
-    victimData[account] = postStolenData
+    victimData["stolenVictimData"][account] = postStolenData
 
 
 #https://www.instagram.com/p/{SHORT_CODE_HERE}/
