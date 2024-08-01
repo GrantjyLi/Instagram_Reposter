@@ -1,13 +1,13 @@
 import tkinter as tk
+HEADER_SIZE = 15
+TEXT_SIZE = 12
 
 class GUI:
+
     def __init__(self):
         self.window = tk.Tk()
         self.window.geometry("700x500")
         self.window.title("Instagram Reposter")
-
-        HEADER_SIZE = 15
-        TEXT_SIZE = 12
 
         self.nameslabel = tk.Label(self.window, text = "Victim Account Names:", font = ('Arial', HEADER_SIZE))
         self.accNames = tk.Text(self.window, font = ('Arial', TEXT_SIZE))
@@ -61,25 +61,33 @@ class GUI:
 
         self.outputLabel = tk.Label(self.window, text = "Program Output", font = ('Arial', HEADER_SIZE))
         self.output = tk.Text(self.window, font = ('Arial', TEXT_SIZE))
+        self.output.config(state = tk.DISABLED)
 
         self.outputLabel.place(x = 290, y = 290)
         self.output.place(x = 10, y = 320, width = 680, height = 170)
 
         self.window.mainloop()
-    
+
     def start(self):
-        print("Running")
+        self.GUIoutput("Running")
 
         options = {}
         options['accNames'] = self.accNames.get('1.0', tk.END).strip().split('\n')
         options['username'] = self.unEntry.get()
         options['password'] = self.pwEntry.get()
         options['postDesc'] = self.postDesc.get('1.0', tk.END).strip()
-
         options['grabContent'] = True if self.grabContent.get() ==  1 else False
         options['autoUpload'] = True if self.autoUpload.get() ==  1 else False
         options['ecoMode'] = True if self.ecoMode.get() ==  1 else False
 
-        print(options)
+        self.GUIoutput(options)
+    
+    def GUIoutput(self, message):
+        self.output.config(state=tk.NORMAL)
+        self.output.insert(tk.END, message)
+        self.output.insert(tk.END, '\n')
+        self.output.config(state=tk.DISABLED)
+        self.output.see(tk.END)
+        
 
 GUI()
