@@ -4,7 +4,9 @@ TEXT_SIZE = 12
 
 class GUI:
 
-    def __init__(self):
+    def __init__(self, initRepost):
+        self.initRepost = initRepost
+
         self.window = tk.Tk()
         self.window.geometry("700x500")
         self.window.title("Instagram Reposter")
@@ -71,16 +73,20 @@ class GUI:
     def start(self):
         self.GUIoutput("Running")
 
-        options = {}
-        options['accNames'] = self.accNames.get('1.0', tk.END).strip().split('\n')
-        options['username'] = self.unEntry.get()
-        options['password'] = self.pwEntry.get()
-        options['postDesc'] = self.postDesc.get('1.0', tk.END).strip()
-        options['grabContent'] = True if self.grabContent.get() ==  1 else False
-        options['autoUpload'] = True if self.autoUpload.get() ==  1 else False
-        options['ecoMode'] = True if self.ecoMode.get() ==  1 else False
+        options = {
+            'accNames' : self.accNames.get('1.0', tk.END).strip().split('\n'),
+            'username' : self.unEntry.get(),
+            'password' : self.pwEntry.get(),
+            'postDesc' : self.postDesc.get('1.0', tk.END).strip(),
+            'grabContent' : self.grabContent.get() ==  1,
+            'autoUpload' : self.autoUpload.get() ==  1,
+            'ecoMode' : self.ecoMode.get() ==  1,
+        }
+        
 
         self.GUIoutput(options)
+
+        self.initRepost(options)
     
     def GUIoutput(self, message):
         self.output.config(state=tk.NORMAL)
@@ -88,6 +94,3 @@ class GUI:
         self.output.insert(tk.END, '\n')
         self.output.config(state=tk.DISABLED)
         self.output.see(tk.END)
-        
-
-GUI()
