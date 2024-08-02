@@ -4,66 +4,91 @@ import instaloader # GOAT!!!!!!
 import os
 import json
 
-with open('Victim_Data.json') as victimFile: # getting victim data folder
-    victimData = json.load(victimFile)
-
-with open('Host_Account.json') as accFile: # getting victim data folder
-    accData = json.load(accFile)
-
-# Initialize Instaloader
-loader = instaloader.Instaloader()
-#loader.login(accData["accUsername"], accData["accPassword"]) # note necessary, but good to avoid rate limit
-
-downloadLim = victimData["downloadLimit"]
-
-def downloadAllAccounts():
-    saveFolder = 'Media'
-    os.makedirs(saveFolder, exist_ok=True)# making the working directory /Media for downloads
-    os.chdir(saveFolder)
-
-    victims = victimData["victimNames"]
-    for victim in victims:
-        print("downloading from " + victim)
-        downloadAccountMedia(victim)
-        print("===========================================\n")
-
-    os.chdir("../") # making the working directory back to the main
-
-    #updating victimData with new data from posts
-    with open('Victim_Data.json', 'w') as victimFile:
-        json.dump(victimData, victimFile, indent=2)
 
 
-def downloadAccountMedia(account):
-    profile = instaloader.Profile.from_username(loader.context, account)
+class Content_Downloader:
+    def __init__(self, options):
+        # Initialize Instaloader
+        self.loader = instaloader.Instaloader()
 
-    downloadCount = 0
-    latestPostDate = None
-    oldestPostGot = None
+        self.victimData = {}
+        self.accData = None
+        self.downloadLim = 0
+        self.victims = []
 
-    for post in profile.get_posts():
-        if downloadCount >= downloadLim:
-            oldestPostGot = post.date.strftime('%Y-%m-%d %H:%M:%S')
-            break
-        elif downloadCount == 0:
-            latestPostDate = post.date.strftime('%Y-%m-%d %H:%M:%S')
+        with open('Victim_Data.json') as victimFile: # getting victim data folder
+            self.victimData = json.load(victimFile)
+        
+        self.victims = options['victims']
 
-        downloadFromShortCode(post.shortcode)
-        downloadCount +=1
+        self.downloadLim = self.victimData["downloadLimit"]
 
-    postStolenData = {}
-    postStolenData["postsStolen"] = downloadCount
-    postStolenData["lastestPostStolen"] = latestPostDate
-    postStolenData["oldestPostStolen"] = oldestPostGot
+        if not options['ecoMode']:
+            try:
+                self.loader.login(options["username"], options["password"])  # Avoid rate limit
+            except instaloader.exceptions.LoginException as e:
+                print("Login failed - Check:")
+                print("- Username/Password")
+                print("- Instagram Availability")
 
-    victimData["stolenVictimData"][account] = postStolenData
+        #updating victimData with new data from posts
+        with open('Host_Account.json', 'w') as hostFile:
+            json.dump({'username': options["username"], 
+                    'password': options["password"]}, 
+                    hostFile, indent=4)
+        
+        #combining the list of victims from the file with the new ones
+        self.victimData['victims'] = list(set(self.victimData['victims']).union(options['victims']))
 
 
-#https://www.instagram.com/p/{SHORT_CODE_HERE}/
-def downloadFromShortCode(shortcode):
 
-    # Load + download the post
-    post = instaloader.Post.from_shortcode(loader.context, shortcode)
-    loader.download_post(post, shortcode)
+    def downloadAllAccounts(self):
+        saveFolder = 'Media'
+        os.makedirs(saveFolder, exist_ok=True)
+        os.chdir(saveFolder)# making the working directory /Media for downloads
 
-    print("https://www.instagram.com/p/"+ shortcode +"/ downloaded")
+        for victim in self.victims:
+            print("downloading from " + victim)
+            self.downloadAccountMedia(victim)
+            print("===========================================\n")
+
+        os.chdir("../") # making the working directory back to the main
+
+        #updating victimData with new data from posts
+        with open('Victim_Data.json', 'w') as victimFile:
+            json.dump(self.victimData, victimFile, indent=4)
+
+
+    def downloadAccountMedia(self, account):
+        profile = instaloader.Profile.from_username(self.loader.context, account)
+
+        downloadCount = 0
+        latestPostDate = None
+        oldestPostGot = None
+
+        for post in profile.get_posts():
+            if downloadCount >= self.downloadLim:
+                oldestPostGot = post.date.strftime('%Y-%m-%d %H:%M:%S')
+                break
+            elif downloadCount == 0:
+                latestPostDate = post.date.strftime('%Y-%m-%d %H:%M:%S')
+
+            self.downloadFromShortCode(post.shortcode)
+            downloadCount +=1
+
+        postStolenData = {}
+        postStolenData["postsStolen"] = downloadCount
+        postStolenData["lastestPostStolen"] = latestPostDate
+        postStolenData["oldestPostStolen"] = oldestPostGot
+
+        self.victimData["stolenVictimData"][account] = postStolenData
+
+
+    #https://www.instagram.com/p/{SHORT_CODE_HERE}/
+    def downloadFromShortCode(self, shortcode):
+
+        # Load + download the post
+        post = instaloader.Post.from_shortcode(self.loader.context, shortcode)
+        self.loader.download_post(post, shortcode)
+
+        print("https://www.instagram.com/p/"+ shortcode +"/ downloaded")

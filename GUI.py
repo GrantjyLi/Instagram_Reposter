@@ -5,7 +5,7 @@ TEXT_SIZE = 12
 class GUI:
 
     def __init__(self, initRepost):
-        self.initRepost = initRepost
+        self.initRepost = initRepost # call back function to main
 
         self.window = tk.Tk()
         self.window.geometry("700x500")
@@ -74,7 +74,7 @@ class GUI:
         self.GUIoutput("Running")
 
         options = {
-            'accNames' : self.accNames.get('1.0', tk.END).strip().split('\n'),
+            'victims' : self.accNames.get('1.0', tk.END).strip().split('\n'),
             'username' : self.unEntry.get(),
             'password' : self.pwEntry.get(),
             'postDesc' : self.postDesc.get('1.0', tk.END).strip(),
