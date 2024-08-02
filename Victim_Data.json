@@ -1,5 +1,6 @@
 {
     "victims": [
+        "urination_nation",
         "justgrantnow"
     ],
     "downloadLimit": 1,
@@ -8,6 +9,11 @@
             "postsStolen": 1,
             "lastestPostStolen": "2022-06-29 22:36:02",
             "oldestPostStolen": "2021-12-28 02:20:34"
+        },
+        "urination_nation": {
+            "postsStolen": 1,
+            "lastestPostStolen": "2016-06-10 06:47:23",
+            "oldestPostStolen": "2016-06-10 06:41:10"
         }
     }
 }

@@ -4,15 +4,12 @@ import instaloader # GOAT!!!!!!
 import os
 import json
 
-
-
 class Content_Downloader:
     def __init__(self, options):
         # Initialize Instaloader
         self.loader = instaloader.Instaloader()
 
         self.victimData = {}
-        self.accData = None
         self.downloadLim = 0
         self.victims = []
 

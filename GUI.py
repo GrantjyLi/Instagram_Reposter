@@ -1,4 +1,5 @@
 import tkinter as tk
+import json
 HEADER_SIZE = 15
 TEXT_SIZE = 12
 
@@ -70,6 +71,7 @@ class GUI:
 
         self.window.mainloop()
 
+
     def start(self):
         self.GUIoutput("Running")
 
@@ -84,7 +86,7 @@ class GUI:
         }
         
 
-        self.GUIoutput(options)
+        self.GUIoutput(json.dumps(options, indent=4, sort_keys=True))
 
         self.initRepost(options)
     
