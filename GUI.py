@@ -73,9 +73,7 @@ class GUI:
 
 
     def start(self):
-        self.guiOut("Running")
-
-        options = {
+        data = {
             'victims' : self.accNames.get('1.0', tk.END).strip().split('\n'),
             'username' : self.unEntry.get(),
             'password' : self.pwEntry.get(),
@@ -84,11 +82,10 @@ class GUI:
             'autoUpload' : self.autoUpload.get() ==  1,
             'ecoMode' : self.ecoMode.get() ==  1,
         }
+
+        self.guiOut("Running...")
+        self.initRepost(data, self)
         
-
-        self.guiOut(json.dumps(options, indent=4, sort_keys=True))
-
-        self.initRepost(options, self)
     
     def guiOut(self, message):
         self.output.config(state=tk.NORMAL)

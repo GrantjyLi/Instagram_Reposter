@@ -16,18 +16,41 @@ from webdriver_manager.chrome import ChromeDriverManager
 from selenium.common.exceptions import NoSuchElementException, TimeoutException
 
 #loading files
-with open('Insta_Tag_Names.json') as tagFile:
-    tagData = json.load(tagFile)
+tagData = {}
+accData = {}
+options = None
+driver = None
+waitTime = 0
+gui = None
+data = {}
 
-with open('Host_Account.json') as accFile:
-    accData = json.load(accFile)
+def chromeActionsInit(postData, gui_instance):
+    global tagData, accData, options, driver, waitTime, data, gui
 
-#setting up Web Driver
-options = Options()
-options.add_experimental_option("detach", True) #leaves window open when done
-driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
+    data = postData
+    gui = gui_instance
 
-waitTime = tagData["elementWaitTime"] # seconds
+    with open('Insta_Tag_Names.json') as tagFile:
+        tagData = json.load(tagFile)
+
+    with open('Host_Account.json') as accFile:
+        accData = json.load(accFile)
+
+    #setting up Web Driver
+    options = Options()
+    options.add_experimental_option("detach", True) #leaves window open when done
+    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
+
+    waitTime = tagData["elementWaitTime"] # seconds
+
+    if not os.path.exists('Media'):
+        gui.guiOut("No Downloaded Content")
+        return
+
+    #ADD a check for contents in /Media
+    #REMOVE UNECESSARY FILE ACCESS for this
+
+
 #helper function to get elements that have to be waited
 def waitElementCSS(tag, errorMessage):
     try:
