@@ -73,7 +73,7 @@ class GUI:
 
 
     def start(self):
-        self.GUIoutput("Running")
+        self.guiOut("Running")
 
         options = {
             'victims' : self.accNames.get('1.0', tk.END).strip().split('\n'),
@@ -86,11 +86,11 @@ class GUI:
         }
         
 
-        self.GUIoutput(json.dumps(options, indent=4, sort_keys=True))
+        self.guiOut(json.dumps(options, indent=4, sort_keys=True))
 
-        self.initRepost(options)
+        self.initRepost(options, self)
     
-    def GUIoutput(self, message):
+    def guiOut(self, message):
         self.output.config(state=tk.NORMAL)
         self.output.insert(tk.END, message)
         self.output.insert(tk.END, '\n')

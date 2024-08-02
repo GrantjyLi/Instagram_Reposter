@@ -4,44 +4,53 @@ import instaloader # GOAT!!!!!!
 import os
 import json
 
-victimData = {}
-downloadLim = 0
-victims = []
-loader = None
+#global variables
+victimData = {} # data about all victims
+downloadLim = 0 # number of posts to download from each victim
+victims = []    # list of victim accounts
+loader = None   #instaloader object
+gui = None
 
-def downloaderInit(options):
-    global victimData, victims, loader, downloadLim
+def downloaderInit(data, gui_instance):
+    global victimData, victims, loader, downloadLim, gui
+    gui = gui_instance
 
     # Initialize Instaloader
     loader = instaloader.Instaloader()
 
-    with open('Victim_Data.json') as victimFile: # getting victim data folder
+    with open('Victim_Data.json') as victimFile: # getting previous victim data folder
         victimData = json.load(victimFile)
     
-    victims = options['victims']
+    victims = data['victims']
     downloadLim = victimData["downloadLimit"]
 
-    if not options['ecoMode']:
+    #log in with instaloader
+    if not data['ecoMode']:
         try:
-            loader.login(options["username"], options["password"])  # Avoid rate limit
-        except instaloader.exceptions.LoginException as e:
-            print("Login failed - Check:")
+            loader.login(data["username"], data["password"])  # Avoid rate limit
+            print("Instaloader Loggin in")
+        except instaloader.exceptions.LoginException:
+            gui.guiOut("Login failed - Check:")
             print("- Username/Password")
             print("- Instagram Availability")
 
+            print("\nLog in with specified account to resolve disturbances")
+            return False
+
     #updating victimData with new data from posts
     with open('Host_Account.json', 'w') as hostFile:
-        json.dump({'username': options["username"], 
-                'password': options["password"]}, 
+        json.dump({'username': data["username"], 
+                'password': data["password"]}, 
                 hostFile, indent=4)
     
     #combining the list of victims from the file with the new ones
-    victimData['victims'] = list(set(victimData['victims']).union(options['victims']))
+    victimData['victims'] = list(set(victimData['victims']).union(data['victims']))
+
+    return True
 
 
 
 def downloadAllAccounts():
-
     saveFolder = 'Media'
     os.makedirs(saveFolder, exist_ok=True)
     os.chdir(saveFolder)# making the working directory /Media for downloads
@@ -59,7 +68,6 @@ def downloadAllAccounts():
 
 
 def downloadAccountMedia(account):
-    #global victimData
 
     profile = instaloader.Profile.from_username(loader.context, account)
 
@@ -87,7 +95,6 @@ def downloadAccountMedia(account):
 
 #https://www.instagram.com/p/{SHORT_CODE_HERE}/
 def downloadFromShortCode( shortcode):
-
     # Load + download the post
     post = instaloader.Post.from_shortcode(loader.context, shortcode)
     loader.download_post(post, shortcode)
