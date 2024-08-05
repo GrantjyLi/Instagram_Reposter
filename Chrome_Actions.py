@@ -17,24 +17,23 @@ from selenium.common.exceptions import NoSuchElementException, TimeoutException
 
 #loading files
 tagData = {}
-accData = {}
+username = ""
+password = ""
 options = None
 driver = None
 waitTime = 0
 gui = None
-data = {}
 
 def chromeActionsInit(postData, gui_instance):
-    global tagData, accData, options, driver, waitTime, data, gui
+    global tagData, username, password, options, driver, waitTime, gui
 
-    data = postData
     gui = gui_instance
 
     with open('Insta_Tag_Names.json') as tagFile:
         tagData = json.load(tagFile)
 
-    with open('Host_Account.json') as accFile:
-        accData = json.load(accFile)
+    username = postData["username"]
+    password = postData["password"]
 
     #setting up Web Driver
     options = Options()
@@ -43,12 +42,10 @@ def chromeActionsInit(postData, gui_instance):
 
     waitTime = tagData["elementWaitTime"] # seconds
 
-    if not os.path.exists('Media'):
+    #checking if Media directory and its content exists
+    if not os.path.exists('Media') or len(os.listdir("Media")) == 0:
         gui.guiOut("No Downloaded Content")
         return
-
-    #ADD a check for contents in /Media
-    #REMOVE UNECESSARY FILE ACCESS for this
 
 
 #helper function to get elements that have to be waited
@@ -73,8 +70,8 @@ def loginInstagram():
         pwInput = driver.find_element(By.CSS_SELECTOR, tagData["pwINPUT"])
         loginBTN = driver.find_element(By.CSS_SELECTOR, tagData["loginBTN"])
 
-        unInput.send_keys(accData["accUsername"])
-        pwInput.send_keys(accData["accPassword"])
+        unInput.send_keys(username)
+        pwInput.send_keys(password)
         loginBTN.click()
     else:
         sys.exit(0)
