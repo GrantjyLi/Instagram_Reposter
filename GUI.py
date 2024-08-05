@@ -1,50 +1,66 @@
 import tkinter as tk
-import json
 HEADER_SIZE = 15
 TEXT_SIZE = 12
 
 class GUI:
 
+    def isInteger(self, integer):
+        return integer.isdigit() or integer == ""
+
     def __init__(self, initRepost):
+
         self.initRepost = initRepost # call back function to main
 
-        self.window = tk.Tk()
-        self.window.geometry("700x500")
-        self.window.title("Instagram Reposter")
+        root = tk.Tk()
+        root.geometry("700x700")
+        root.title("Instagram Reposter")
 
-        self.nameslabel = tk.Label(self.window, text = "Victim Account Names:", font = ('Arial', HEADER_SIZE))
-        self.accNames = tk.Text(self.window, font = ('Arial', TEXT_SIZE))
+        self.nameslabel = tk.Label(root, text = "Victim Account Names:", font = ('Arial', HEADER_SIZE))
+        self.accNames = tk.Text(root, font = ('Arial', TEXT_SIZE))
 
-        self.unEntry = tk.Entry(self.window, font = ('Arial', TEXT_SIZE))
-        self.pwEntry = tk.Entry(self.window, font = ('Arial', TEXT_SIZE))
+        self.unlabel = tk.Label(root, text = "Enter Account Username:", font = ('Arial', HEADER_SIZE))
+        self.pwlabel = tk.Label(root, text = "Enter Account Password:", font = ('Arial', HEADER_SIZE))
 
-        self.unlabel = tk.Label(self.window, text = "Enter Account Username:", font = ('Arial', HEADER_SIZE))
-        self.pwlabel = tk.Label(self.window, text = "Enter Account Password:", font = ('Arial', HEADER_SIZE))
+        self.unEntry = tk.Entry(root, font = ('Arial', TEXT_SIZE))
+        self.pwEntry = tk.Entry(root, font = ('Arial', TEXT_SIZE))
+
+        vcmd = (root.register(self.isInteger), '%P') # to only let integer input keys
+        self.limitLabel = tk.Label(root, text = "Download Limit (from each Account):", font = ('Arial', TEXT_SIZE))
+        self.downloadLim = tk.Entry(root, font = ('Arial', TEXT_SIZE), validate='key', validatecommand=vcmd)
+
+        self.saveLogin = tk.IntVar()
+
+        self.saveLoginCBTN = tk.Checkbutton(root, 
+            text = "Save Login", 
+            variable = self.saveLogin, 
+            font = ('Arial', TEXT_SIZE))
 
         self.nameslabel.place(x = 10, y = 10)
         self.accNames.place(x = 10, y = 35, width = 300, height = 150)
         self.unlabel.place(x = 10, y = 195)
         self.unEntry.place(x = 10, y = 225)
+        self.saveLoginCBTN.place(x = 200, y = 220)
         self.pwlabel.place(x = 10, y = 250)
         self.pwEntry.place(x = 10, y = 280)
+        self.limitLabel.place(x = 10, y = 305)
+        self.downloadLim.place(x = 10, y = 335)
 
-
-        self.postDescLabel = tk.Label(self.window, text = "Automated Post Description:", font = ('Arial', HEADER_SIZE))
-        self.postDesc = tk.Text(self.window, font = ('Arial', TEXT_SIZE))
+        self.postDescLabel = tk.Label(root, text = "Automated Post Description:", font = ('Arial', HEADER_SIZE))
+        self.postDesc = tk.Text(root, font = ('Arial', TEXT_SIZE))
 
         self.grabContent = tk.IntVar()
         self.autoUpload = tk.IntVar()
         self.ecoMode = tk.IntVar()
 
-        self.grabContentCBTN = tk.Checkbutton(self.window, 
+        self.grabContentCBTN = tk.Checkbutton(root, 
             text = "Grab Content", 
             variable = self.grabContent, 
             font = ('Arial', TEXT_SIZE))
-        self.autoUploadCBTN = tk.Checkbutton(self.window, 
+        self.autoUploadCBTN = tk.Checkbutton(root, 
             variable = self.autoUpload, 
             text = "Automated Upload", 
             font = ('Arial', TEXT_SIZE))
-        self.ecoModeCBTN = tk.Checkbutton(self.window, 
+        self.ecoModeCBTN = tk.Checkbutton(root, 
             variable = self.ecoMode, 
             text = "Economy Mode", 
             font = ('Arial', TEXT_SIZE))
@@ -53,7 +69,7 @@ class GUI:
         self.autoUploadCBTN.select()
         self.ecoModeCBTN.select()
 
-        self.startBTN = tk.Button(self.window, text = "Start", command = self.start, font = ('Arial', HEADER_SIZE))
+        self.startBTN = tk.Button(root, text = "Start", command = self.start, font = ('Arial', HEADER_SIZE))
 
         self.postDescLabel.place(x = 335, y= 10)
         self.postDesc.place(x = 335, y = 35, width = 350, height = 175)
@@ -62,14 +78,14 @@ class GUI:
         self.ecoModeCBTN.place(x = 335, y = 260)
         self.startBTN.place(x = 520, y = 230, width = 125, height = 50)
 
-        self.outputLabel = tk.Label(self.window, text = "Program Output", font = ('Arial', HEADER_SIZE))
-        self.output = tk.Text(self.window, font = ('Arial', TEXT_SIZE))
+        self.outputLabel = tk.Label(root, text = "Program Output", font = ('Arial', HEADER_SIZE))
+        self.output = tk.Text(root, font = ('Arial', TEXT_SIZE))
         self.output.config(state = tk.DISABLED)
 
-        self.outputLabel.place(x = 290, y = 290)
-        self.output.place(x = 10, y = 320, width = 680, height = 170)
+        self.outputLabel.place(x = 290, y = 360)
+        self.output.place(x = 10, y = 390, width = 680, height = 170)
 
-        self.window.mainloop()
+        root.mainloop()
 
 
     def start(self):
@@ -78,6 +94,8 @@ class GUI:
             'username' : self.unEntry.get(),
             'password' : self.pwEntry.get(),
             'postDesc' : self.postDesc.get('1.0', tk.END).strip(),
+            'downloadLim' : self.downloadLim.get(),
+            'saveLogin' : self.saveLogin.get() == 1,
             'grabContent' : self.grabContent.get() ==  1,
             'autoUpload' : self.autoUpload.get() ==  1,
             'ecoMode' : self.ecoMode.get() ==  1,

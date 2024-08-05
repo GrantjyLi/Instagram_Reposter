@@ -93,7 +93,7 @@ def downloadAccountMedia(account):
     victimData["stolenVictimData"][account] = postStolenData
 
 
-#https://www.instagram.com/p/{SHORT_CODE_HERE}/
+#instagram.com/p/{SHORT_CODE_HERE}
 def downloadFromShortCode( shortcode):
     # Load + download the post
     post = instaloader.Post.from_shortcode(loader.context, shortcode)

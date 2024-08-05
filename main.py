@@ -4,6 +4,7 @@ from GUI import GUI
 
 #callback function passing to GUI
 def initRepost(data, gui):
+    print(data)
     downloadData = {
         "victims" : data['victims'],
         "username" : data['username'],
