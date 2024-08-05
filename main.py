@@ -2,6 +2,9 @@ from Chrome_Actions import *
 from downloaderV2 import *
 from GUI import GUI
 
+import os
+import json
+
 #callback function passing to GUI
 def initRepost(data, gui):
     print(data)
@@ -38,8 +41,13 @@ def initRepost(data, gui):
         json.dump(data, hostFile, indent=4)
 
 setupData = {}
-with open('Victim_Data.json') as victimFile: # getting previous victim data folder
-    setupData = json.load(victimFile)
 
-gui = GUI(initRepost)
+if os.path.exists("Save_Data.json"):
+    with open('Save_Data.json') as saveData: # getting previous victim data folder
+        setupData = json.load(saveData)
+else:
+    f = open("Save_Data.json", "a")
+    f.close()
+
+gui = GUI(initRepost, setupData)
 
