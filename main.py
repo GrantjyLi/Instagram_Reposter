@@ -32,7 +32,7 @@ def initRepost(data, gui):
         # uploadMedia()
     
     #saving menu options for next time
-    with open('Save_Data.json', 'w') as hostFile:
+    with open('User_Save.json', 'w') as hostFile:
         json.dump(data, hostFile, indent=4)
 
 
@@ -48,11 +48,11 @@ setupData = {
     'autoUpload': False, 
     'ecoMode': False
 }
-if os.path.exists("Save_Data.json"):
-    with open('Save_Data.json') as saveData:
+if os.path.exists("User_Save.json"):
+    with open('User_Save.json') as saveData:
         setupData = json.load(saveData)
 else:
-    with open('Save_Data.json', 'w') as setupFile:
+    with open('User_Save.json', 'w') as setupFile:
         json.dump(setupData, setupFile, indent= 4)
 
 gui = GUI(initRepost, setupData)
