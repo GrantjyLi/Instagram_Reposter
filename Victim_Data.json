@@ -1,8 +1,8 @@
 {
     "victims": [
-        "justgrantnow",
         "urination_nation",
-        "linustech"
+        "linustech",
+        "justgrantnow"
     ],
     "downloadLimit": 1,
     "stolenVictimData": {
@@ -18,8 +18,8 @@
         },
         "linustech": {
             "postsStolen": 1,
-            "lastestPostStolen": "2024-08-01 16:40:05",
-            "oldestPostStolen": "2024-07-22 22:54:05"
+            "lastestPostStolen": "2024-08-02 20:07:13",
+            "oldestPostStolen": "2024-08-01 16:40:05"
         }
     }
 }

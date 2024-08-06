@@ -1,0 +1,15 @@
+{
+    "victims": [
+        "justgrantnow",
+        "urination_nation",
+        "linustech"
+    ],
+    "username": "grant",
+    "password": "cheese",
+    "postDesc": "Good lucking not getting caught",
+    "downloadLim": "65",
+    "saveLogin": true,
+    "grabContent": false,
+    "autoUpload": true,
+    "ecoMode": false
+}

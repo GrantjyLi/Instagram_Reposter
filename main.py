@@ -7,7 +7,6 @@ import json
 
 #callback function passing to GUI
 def initRepost(data, gui):
-    print(data)
     downloadData = {
         "victims" : data['victims'],
         "username" : data['username'],
@@ -24,15 +23,11 @@ def initRepost(data, gui):
     if data['grabContent']:
         if data['victims'] == ['']:
             gui.guiOut("Enter victim Names")
-            return
-        
-        if not downloaderInit(downloadData, gui):
-            return
-        
-        downloadAllAccounts()
+        elif downloaderInit(downloadData, gui):
+            downloadAllAccounts()
 
-    if data['autoUpload']:
-        chromeActionsInit(repostData, gui)
+    #if data['autoUpload']:
+        #chromeActionsInit(repostData, gui)
         # loginInstagram()
         # uploadMedia()
     
@@ -40,14 +35,25 @@ def initRepost(data, gui):
     with open('Save_Data.json', 'w') as hostFile:
         json.dump(data, hostFile, indent=4)
 
-setupData = {}
 
+#check for previous data entered into GUI and load it
+setupData = {
+    'victims': [], 
+    'username': '', 
+    'password': '', 
+    'postDesc': '', 
+    'downloadLim': '', 
+    'saveLogin': True, 
+    'grabContent': False, 
+    'autoUpload': False, 
+    'ecoMode': False
+}
 if os.path.exists("Save_Data.json"):
-    with open('Save_Data.json') as saveData: # getting previous victim data folder
+    with open('Save_Data.json') as saveData:
         setupData = json.load(saveData)
 else:
-    f = open("Save_Data.json", "a")
-    f.close()
+    with open('Save_Data.json', 'w') as setupFile:
+        json.dump(setupData, setupFile, indent= 4)
 
 gui = GUI(initRepost, setupData)
 

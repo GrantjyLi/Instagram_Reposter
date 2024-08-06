@@ -4,10 +4,10 @@ TEXT_SIZE = 12
 
 class GUI:
 
-    def isInteger(self, integer):
-        return integer.isdigit() or integer == ""
+    def isInteger(self, keyInput):
+        return keyInput.isdigit() or keyInput == ""
 
-    def __init__(self, initRepost):
+    def __init__(self, initRepost, setupData):
 
         self.initRepost = initRepost # call back function to main
 
@@ -17,18 +17,27 @@ class GUI:
 
         self.nameslabel = tk.Label(root, text = "Victim Account Names:", font = ('Arial', HEADER_SIZE))
         self.accNames = tk.Text(root, font = ('Arial', TEXT_SIZE))
+        self.accNames.insert(tk.END, "\n".join(setupData['victims']))
 
         self.unlabel = tk.Label(root, text = "Enter Account Username:", font = ('Arial', HEADER_SIZE))
         self.pwlabel = tk.Label(root, text = "Enter Account Password:", font = ('Arial', HEADER_SIZE))
 
-        self.unEntry = tk.Entry(root, font = ('Arial', TEXT_SIZE))
-        self.pwEntry = tk.Entry(root, font = ('Arial', TEXT_SIZE))
+        self.unEntry = tk.Entry(root, font = ('Arial', TEXT_SIZE), 
+            textvariable = tk.StringVar(value = setupData['username'])
+        )
+        self.pwEntry = tk.Entry(root, font = ('Arial', TEXT_SIZE), 
+            textvariable = tk.StringVar(value = setupData['password'])
+        )
 
         vcmd = (root.register(self.isInteger), '%P') # to only let integer input keys
         self.limitLabel = tk.Label(root, text = "Download Limit (from each Account):", font = ('Arial', TEXT_SIZE))
-        self.downloadLim = tk.Entry(root, font = ('Arial', TEXT_SIZE), validate='key', validatecommand=vcmd)
+        self.downloadLim = tk.Entry(root, font = ('Arial', TEXT_SIZE), 
+            validate='key', 
+            validatecommand=vcmd, 
+            textvariable = tk.StringVar(value = setupData['downloadLim'])
+        )
 
-        self.saveLogin = tk.IntVar()
+        self.saveLogin = tk.IntVar(value = setupData['saveLogin'])
 
         self.saveLoginCBTN = tk.Checkbutton(root, 
             text = "Save Login", 
@@ -47,10 +56,11 @@ class GUI:
 
         self.postDescLabel = tk.Label(root, text = "Automated Post Description:", font = ('Arial', HEADER_SIZE))
         self.postDesc = tk.Text(root, font = ('Arial', TEXT_SIZE))
+        self.postDesc.insert(tk.END, setupData['postDesc'])
 
-        self.grabContent = tk.IntVar()
-        self.autoUpload = tk.IntVar()
-        self.ecoMode = tk.IntVar()
+        self.grabContent = tk.IntVar(value = setupData['grabContent'])
+        self.autoUpload = tk.IntVar(value = setupData['autoUpload'])
+        self.ecoMode = tk.IntVar(value = setupData['ecoMode'])
 
         self.grabContentCBTN = tk.Checkbutton(root, 
             text = "Grab Content", 
@@ -64,10 +74,6 @@ class GUI:
             variable = self.ecoMode, 
             text = "Economy Mode", 
             font = ('Arial', TEXT_SIZE))
-
-        self.grabContentCBTN.select()
-        self.autoUploadCBTN.select()
-        self.ecoModeCBTN.select()
 
         self.startBTN = tk.Button(root, text = "Start", command = self.start, font = ('Arial', HEADER_SIZE))
 

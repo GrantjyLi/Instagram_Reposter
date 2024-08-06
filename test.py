@@ -7,5 +7,3 @@ if os.path.exists("Save_Data.json"):
 else:
     f = open("Save_Data.json", "a")
     f.close()
-
-print(setupData)
